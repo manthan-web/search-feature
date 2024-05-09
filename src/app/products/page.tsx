@@ -1,37 +1,44 @@
-import { getUsers } from "@/drizzle/db"
-import { insertProducts } from "@/drizzle/db"
-
-const Products = async () => {
-
-  const allUsers = await getUsers()
-
-  const insertData = async () => {
-    "use server"
+import React from 'react'
+import SearchProductsInput from '@/components/Input'
+import Product from "@/components/product"
+import { Suspense } from 'react'
+import ProductSkeleton from '@/components/productsSkeleton'
 
 
-    // await insertProducts()
+const Products = async (
 
+  {
+    searchParams,
+  }: {
+    searchParams?: {
+      query?: string;
+    };
   }
+) => {
+  
+  const query = searchParams?.query || ''
+  // console.log(query);
+  
 
   return (
-    
-    <>
-    <div>Products</div>
-    <form action={insertData}>
-        <button type="submit" className="bg-indigo-500 px-4 py-2 rounded-sm text-white">Insert Products</button>
-    </form>
-    <div>
-        {allUsers.map((user) => {
-            return (
-                <div className="flex gap-2 w-1/2 items-center justify-center p-2 text-black bg-zinc-200 mt-3" key={user.id}>
-                    <p>{user.name}</p>
-                    <p>{user.email}</p>
-                </div>
-            )
-        })}
-    </div>
-    </>
 
+
+    <div className='min-h-screen w-full flex flex-col px-12 py-12'>
+      <h1 className='text-4xl font-semibold'>Products</h1>
+
+
+      <SearchProductsInput />
+
+
+      <div className='grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8'>
+
+      <Suspense fallback={<ProductSkeleton />}>
+        <Product query={query} />
+      </Suspense>
+
+      </div>
+    
+    </div>
   )
 }
 

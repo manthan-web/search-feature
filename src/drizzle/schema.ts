@@ -32,12 +32,12 @@ export const ProductsTable = pgTable(
     id: serial('id').primaryKey(),
     name: text('name').notNull().unique(),
     description: text('description').notNull(),
-    price: integer('price').notNull(),
+    price: integer("price").notNull().default(0),
     image: text("image"),
   },
   (products) => {
     return {
-      uniqueIdx: uniqueIndex('unique_idx1').on(products.name),
+      uniqueIdx: uniqueIndex('unique_idx1').on(products.id),
     };
   },
 );
